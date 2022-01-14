@@ -1,8 +1,6 @@
-package voteapi
+package vote
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
 type MonthFilter string
 
@@ -11,51 +9,34 @@ const (
 	MonthFilterPrevious MonthFilter = "previous"
 )
 
-type responseVoters struct {
-	Name    string          `json:"name"`
-	Address string          `json:"address"`
-	Port    string          `json:"port"`
-	Month   string          `json:"month"`
-	Voters  []responseVoter `json:"voters"`
-}
-
-type responseVoter struct {
-	Nickname string `json:"nickname"`
-	Votes    string `json:"votes"`
-}
-
-type Voters struct {
-	Name    string
-	Address string
-	Port    int
-	Month   string
-	Voters  []Voter
-}
-
 type Voter struct {
-	Nickname string
-	Votes    int
+	Name  string
+	Votes int
 }
 
-func votersFromBytes(data []byte) (Voters, error) {
+func readVoters(data []byte) ([]Voter, error) {
 	var resp responseVoters
-
 	if err := json.Unmarshal(data, &resp); err != nil {
-		return Voters{}, err
+		return nil, err
 	}
 
-	var voters []Voter
-	for _, v := range resp.Voters {
-		voters = append(voters, Voter{
-			Nickname: v.Nickname,
-			Votes:    parseInt(v.Votes),
-		})
+	voters := make([]Voter, len(resp.Voters))
+	for i, v := range resp.Voters {
+		voters[i] = Voter{
+			Name:  v.Nickname,
+			Votes: parseInt(v.Votes),
+		}
 	}
-	return Voters{
-		Name:    resp.Name,
-		Address: resp.Address,
-		Port:    parseInt(resp.Port),
-		Month:   resp.Month,
-		Voters:  voters,
-	}, nil
+	return voters, nil
+}
+
+type responseVoters struct {
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	Port    string `json:"port"`
+	Month   string `json:"month"`
+	Voters  []struct {
+		Nickname string `json:"nickname"`
+		Votes    string `json:"votes"`
+	} `json:"voters"`
 }

@@ -1,3 +1,3 @@
-module github.com/emperials/df-voteapi
+module github.com/df-mc/vote
 
 go 1.14
