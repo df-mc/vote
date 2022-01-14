@@ -9,11 +9,15 @@ const (
 	MonthFilterPrevious MonthFilter = "previous"
 )
 
+// Voter represents a user that voted for a server at least once in the month specified.
 type Voter struct {
-	Name  string
+	// Name is the username of the voter as specified when voting on the voting website.
+	Name string
+	// Votes is the amount of times the Voter voted in the month specified.
 	Votes int
 }
 
+// readVoters reads a Voter slice from the JSON encoded data slice passed.
 func readVoters(data []byte) ([]Voter, error) {
 	var resp responseVoters
 	if err := json.Unmarshal(data, &resp); err != nil {

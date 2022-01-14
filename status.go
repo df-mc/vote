@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 )
 
+// ServerStatus contains information on the server associated with the voting key specified in the call to NewClient.
+// It has status and statistics relating to the voting website and server itself.
 type ServerStatus struct {
 	Players    int
 	MaxPlayers int
@@ -12,11 +14,12 @@ type ServerStatus struct {
 	Score      int
 	Rank       int
 	Votes      int
-	Favorited  int
+	Favourited int
 	Comments   int
 	LastOnline string
 }
 
+// readServerStatus reads a ServerStatus from the JSON encoded data slice passed.
 func readServerStatus(data []byte) (ServerStatus, error) {
 	var resp responseServerInfo
 	if err := json.Unmarshal(data, &resp); err != nil {
@@ -31,7 +34,7 @@ func readServerStatus(data []byte) (ServerStatus, error) {
 		Score:      parseInt(resp.Score),
 		Rank:       parseInt(resp.Rank),
 		Votes:      parseInt(resp.Votes),
-		Favorited:  parseInt(resp.Favorited),
+		Favourited: parseInt(resp.Favorited),
 		Comments:   parseInt(resp.Comments),
 		LastOnline: resp.LastOnline,
 	}, nil

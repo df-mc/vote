@@ -9,10 +9,15 @@ import (
 )
 
 const (
+	// defaultBaseURL is the default URL used as voting website.
 	defaultBaseURL = "https://minecraftpocket-servers.com/api/"
 )
 
+// Client is a client used to access the API of a voting website. Client has methods that may be used to get
+// information about votes, voters and general status and statistics of the server.
 type Client struct {
+	// BaseURL is the URL that points to the API of the voting website. By default, this field is set to
+	// https://minecraftpocket-servers.com/api/.
 	BaseURL *url.URL
 
 	key string
