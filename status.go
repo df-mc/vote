@@ -50,7 +50,7 @@ type responseServerInfo struct {
 	Location   string `json:"location"`
 	HostName   string `json:"host_name"`
 	Players    string `json:"players"`
-	MaxPlayers string `json:"max_players"`
+	MaxPlayers string `json:"maxplayers"`
 	Version    string `json:"version"`
 	Platform   string `json:"platform"`
 	Uptime     string `json:"uptime"`

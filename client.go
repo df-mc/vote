@@ -127,19 +127,13 @@ func (c *Client) ServerStatus() (ServerStatus, error) {
 // get performs a GET request with the key and query strings passed added to the base URL of the Client. The method
 // returns the body of the response as a byte slice or an error if the http request was unsuccessful.
 func (c *Client) get(queryStrings map[string]string) ([]byte, error) {
-	parsed, err := c.BaseURL.Parse("?key=" + c.key)
-	if err != nil {
-		// Should never happen.
-		panic(err)
-	}
+	query := url.Values{"key": []string{c.key}}
 	for k, v := range queryStrings {
-		parsed, err = parsed.Parse("&" + k + "=" + v)
-		if err != nil {
-			// Should never happen.
-			panic(err)
-		}
+		query.Set(k, v)
 	}
-	req, err := http.NewRequest(http.MethodGet, parsed.String(), nil)
+	u, _ := c.BaseURL.Parse("?" + query.Encode())
+
+	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		// Should never happen.
 		panic(err)
