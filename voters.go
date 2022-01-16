@@ -2,13 +2,6 @@ package vote
 
 import "encoding/json"
 
-type MonthFilter string
-
-const (
-	MonthFilterCurrent  MonthFilter = "current"
-	MonthFilterPrevious MonthFilter = "previous"
-)
-
 // Voter represents a user that voted for a server at least once in the month specified.
 type Voter struct {
 	// Name is the username of the voter as specified when voting on the voting website.

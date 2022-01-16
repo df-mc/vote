@@ -63,15 +63,27 @@ func (c *Client) Claim(name string) (bool, error) {
 	return string(data) == "1", nil
 }
 
-// Voters returns up to n top voters of the month provided. The limit n can be anywhere in the range of 1-1000.
-func (c *Client) Voters(month MonthFilter, n int) ([]Voter, error) {
+// Voters returns up to n top voters of the current month. The limit n can be anywhere in the range of 1-1000.
+func (c *Client) Voters(n int) ([]Voter, error) {
+	return c.voters("current", n)
+}
+
+// VotersPreviousMonth returns up to n top voters of the previous month. The limit n can be anywhere in the range of
+// 1-1000.
+func (c *Client) VotersPreviousMonth(n int) ([]Voter, error) {
+	return c.voters("previous", n)
+}
+
+// voters returns up to n top voters of the month passed ("current" or "previous"). The limit n can be anywhere in the
+// range of 1-1000.
+func (c *Client) voters(month string, n int) ([]Voter, error) {
 	if n < 1 || n > 1000 {
 		return nil, errors.New("n must be in the range of 1-1000")
 	}
 	data, err := c.get(map[string]string{
 		"object":  "servers",
 		"element": "voters",
-		"month":   string(month),
+		"month":   month,
 		"format":  "json",
 		"limit":   strconv.Itoa(n),
 	})
